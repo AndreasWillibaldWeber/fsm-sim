@@ -13,4 +13,4 @@ build:
 clean:
 	if [ -d $(BUILD_FOLDER) ]; then rm -rf $(BUILD_FOLDER); fi
 
-.PHONY: build clean
+.PHONY: build clean all

@@ -7,6 +7,8 @@ import (
 
 	cli "github.com/AndreasWillibaldWeber/fsm-sim/cmd/cli"
 	machine "github.com/AndreasWillibaldWeber/fsm-sim/machines"
+	vizualization "github.com/AndreasWillibaldWeber/fsm-sim/machines/vizualization"
+	"github.com/goccy/go-graphviz"
 )
 
 func main() {
@@ -19,6 +21,11 @@ func main() {
 
 	moore, err := config.SetupMooreMachine()
 	if err != nil {
+		fmt.Println("error:", err)
+		os.Exit(2)
+	}
+
+	if err := vizualization.DrawMoore(moore, graphviz.SVG, graphviz.CIRCO, "./fsm.svg"); err != nil {
 		fmt.Println("error:", err)
 		os.Exit(2)
 	}
