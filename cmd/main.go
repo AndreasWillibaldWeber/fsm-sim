@@ -8,7 +8,7 @@ import (
 	cli "github.com/AndreasWillibaldWeber/fsm-sim/cmd/cli"
 	machine "github.com/AndreasWillibaldWeber/fsm-sim/machines"
 	vizualization "github.com/AndreasWillibaldWeber/fsm-sim/machines/vizualization"
-	"github.com/goccy/go-graphviz"
+	graphviz "github.com/goccy/go-graphviz"
 )
 
 func main() {

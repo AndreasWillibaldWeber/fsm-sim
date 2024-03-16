@@ -13,7 +13,7 @@ A simple Finite State Machine Simulation.
 fsm -s "a,b,c,d" -a "0,1" -t "(a,0,a),(a,1,b),(b,0,a),(b,1,c),(c,0,a),(c,1,d),(d,0,a),(d,1,d)" -m "(a,0),(b,0),(c,0),(d,1)" -c "a" -i "0,1,0,1,0,1,1,1,1"
 ```
 
-**ClI Output:**
+**CLI Output:**
 ```
 Input:   0 1 0 1 0 1 1 1 1
 States: a a b a b a b c d d
