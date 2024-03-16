@@ -8,10 +8,13 @@ A simple Finite State Machine Simulation.
 
 #### Example
 
+**CLI Command:**
 ```
-fsm -s "a,b,c" -a "0,1" -t "(a,0,b),(a,1,b),(b,0,a),(b,1,c),(c,0,a),(c,1,b)" 
-    -m "(a,0),(b,1),(c,1)" -c "a" -i "0,1,0,1,0"
+fsm -s "a,b,c,d" -a "0,1" -t "(a,0,a),(a,1,b),(b,0,a),(b,1,c),(c,0,a),(c,1,d),(d,0,a),(d,1,d)" -m "(a,0),(b,0),(c,0),(d,1)" -c "a" -i "0,1,0,1,0,1,1,1,1"
 ```
+**Visualization Output:**
+
+![Visualization Output](https://raw.githubusercontent.com/AndreasWillibaldWeber/fsm-sim/main/docs/images/fsm.svg)
 
 #### Flags
 
