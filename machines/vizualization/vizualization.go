@@ -5,6 +5,13 @@ import (
 
 	moore "github.com/AndreasWillibaldWeber/fsm-sim/machines/moore"
 	graphviz "github.com/goccy/go-graphviz"
+	"github.com/goccy/go-graphviz/cgraph"
+)
+
+const (
+	commaSeparator string = ", "
+	startString    string = "start"
+	startSign      string = "_"
 )
 
 func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layout, path string) error {
@@ -24,11 +31,11 @@ func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layou
 
 	for n1, left := range moore.Transitions {
 		for i, n2 := range left {
-			m1, err := graph.CreateNode(n1 + ", " + moore.Mapping[n1])
+			m1, err := graph.CreateNode(n1 + commaSeparator + moore.Mapping[n1])
 			if err != nil {
 				return err
 			}
-			m2, err := graph.CreateNode(n2 + ", " + moore.Mapping[n2])
+			m2, err := graph.CreateNode(n2 + commaSeparator + moore.Mapping[n2])
 			if err != nil {
 				return err
 			}
@@ -39,6 +46,21 @@ func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layou
 			e.SetLabel(string(i))
 		}
 	}
+
+	s1, err := graph.CreateNode(startSign)
+	if err != nil {
+		return err
+	}
+	s1.SetShape(cgraph.PointShape)
+	s2, err := graph.CreateNode(moore.CurrentState + commaSeparator + moore.Mapping[moore.CurrentState])
+	if err != nil {
+		return err
+	}
+	e, err := graph.CreateEdge(startString, s1, s2)
+	if err != nil {
+		return err
+	}
+	e.SetLabel(startString)
 
 	if err := g.RenderFilename(graph, format, path); err != nil {
 		return err
