@@ -23,6 +23,7 @@ type Config struct {
 	Transitions []Transition
 	Mapping     []Mapping
 	Start       string
+	Accept      bool
 }
 
 type Result struct {
@@ -59,6 +60,8 @@ func (c *Config) SetupMooreMachine() (*moore.Moore, error) {
 	if !machine.Validate() {
 		return nil, errors.New("machine has not a valid configuration")
 	}
+
+	machine.Accept = c.Accept
 
 	return &machine, nil
 }

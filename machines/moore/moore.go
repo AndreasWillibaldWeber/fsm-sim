@@ -11,6 +11,7 @@ type Moore struct {
 	Alphabet     []string
 	Transitions  map[string]map[string]string
 	Mapping      map[string]string
+	Accept       bool
 }
 
 func (m *Moore) AddState(state string) {

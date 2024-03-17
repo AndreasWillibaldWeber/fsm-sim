@@ -45,6 +45,7 @@ func (f *Flags) toConfig() (*machines.Config, error) {
 		Transitions: transitions,
 		Mapping:     mappings,
 		Start:       strings.TrimSpace(f.Start),
+		Accept:      f.Accept,
 	}, nil
 }
 

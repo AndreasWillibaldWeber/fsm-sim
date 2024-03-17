@@ -12,6 +12,8 @@ const (
 	commaSeparator string = ", "
 	startString    string = "start"
 	startSign      string = "_"
+	linebreak      string = "\n"
+	acceptSign     string = "1"
 )
 
 func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layout, path string) error {
@@ -32,28 +34,36 @@ func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layou
 
 	graph.SetRankDir(cgraph.LRRank)
 
+	graph.SetOutputOrder(cgraph.NodesFirst)
+	graph.SetOrdering(cgraph.OutOrdering)
+
 	for n1, left := range moore.Transitions {
 		for i, n2 := range left {
 			m1, err := graph.CreateNode(n1)
 			if err != nil {
 				return err
 			}
-			m1.SetLabel(n1 + "\n" + moore.Mapping[n1])
 			m2, err := graph.CreateNode(n2)
 			if err != nil {
 				return err
 			}
-			m2.SetLabel(n2 + "\n" + moore.Mapping[n2])
 			e, err := graph.CreateEdge(string(i), m1, m2)
 			if err != nil {
 				return err
 			}
+			if moore.Accept && moore.Mapping[n1] == acceptSign {
+				m1.SetShape(cgraph.DoubleCircleShape)
+			}
+			if moore.Accept && moore.Mapping[n2] == acceptSign {
+				m2.SetShape(cgraph.DoubleCircleShape)
+			}
+			if !moore.Accept {
+				m1.SetLabel(n1 + linebreak + moore.Mapping[n1])
+				m2.SetLabel(n2 + linebreak + moore.Mapping[n2])
+			}
 			e.SetLabel(string(i))
 		}
 	}
-
-	graph.SetOutputOrder(cgraph.NodesFirst)
-	graph.SetOrdering(cgraph.OutOrdering)
 
 	s1, err := graph.CreateNode(startSign)
 	if err != nil {
