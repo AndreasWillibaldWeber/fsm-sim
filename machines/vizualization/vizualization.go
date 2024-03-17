@@ -30,19 +30,20 @@ func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layou
 	// todo: integrate layout, make layout selectable via CLI flag
 	//graph.SetLayout(string(graphviz.CIRCO))
 
-	// todo: check if sorting transitions makes the output repeatable for LRRank, make rankDir selectable via CLI flag
 	graph.SetRankDir(cgraph.LRRank)
 
 	for n1, left := range moore.Transitions {
 		for i, n2 := range left {
-			m1, err := graph.CreateNode(n1 + commaSeparator + moore.Mapping[n1])
+			m1, err := graph.CreateNode(n1)
 			if err != nil {
 				return err
 			}
-			m2, err := graph.CreateNode(n2 + commaSeparator + moore.Mapping[n2])
+			m1.SetLabel(n1 + "\n" + moore.Mapping[n1])
+			m2, err := graph.CreateNode(n2)
 			if err != nil {
 				return err
 			}
+			m2.SetLabel(n2 + "\n" + moore.Mapping[n2])
 			e, err := graph.CreateEdge(string(i), m1, m2)
 			if err != nil {
 				return err
@@ -51,12 +52,15 @@ func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layou
 		}
 	}
 
+	graph.SetOutputOrder(cgraph.NodesFirst)
+	graph.SetOrdering(cgraph.OutOrdering)
+
 	s1, err := graph.CreateNode(startSign)
 	if err != nil {
 		return err
 	}
 	s1.SetShape(cgraph.PointShape)
-	s2, err := graph.CreateNode(moore.CurrentState + commaSeparator + moore.Mapping[moore.CurrentState])
+	s2, err := graph.CreateNode(moore.CurrentState)
 	if err != nil {
 		return err
 	}
