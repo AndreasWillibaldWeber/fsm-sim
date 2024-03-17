@@ -27,7 +27,11 @@ func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layou
 		g.Close()
 	}()
 
-	graph.SetLayout(string(graphviz.CIRCO))
+	// todo: integrate layout, make layout selectable via CLI flag
+	//graph.SetLayout(string(graphviz.CIRCO))
+
+	// todo: check if sorting transitions makes the output repeatable for LRRank, make rankDir selectable via CLI flag
+	graph.SetRankDir(cgraph.LRRank)
 
 	for n1, left := range moore.Transitions {
 		for i, n2 := range left {
