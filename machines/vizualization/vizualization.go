@@ -5,7 +5,7 @@ import (
 
 	moore "github.com/AndreasWillibaldWeber/fsm-sim/machines/moore"
 	graphviz "github.com/goccy/go-graphviz"
-	"github.com/goccy/go-graphviz/cgraph"
+	cgraph "github.com/goccy/go-graphviz/cgraph"
 )
 
 const (
