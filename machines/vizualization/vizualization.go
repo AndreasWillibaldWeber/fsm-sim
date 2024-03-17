@@ -51,9 +51,11 @@ func DrawMoore(moore *moore.Moore, format graphviz.Format, layout graphviz.Layou
 			if err != nil {
 				return err
 			}
+			m1.SetShape(cgraph.CircleShape)
 			if moore.Accept && moore.Mapping[n1] == acceptSign {
 				m1.SetShape(cgraph.DoubleCircleShape)
 			}
+			m2.SetShape(cgraph.CircleShape)
 			if moore.Accept && moore.Mapping[n2] == acceptSign {
 				m2.SetShape(cgraph.DoubleCircleShape)
 			}
