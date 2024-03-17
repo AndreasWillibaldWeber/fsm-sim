@@ -15,6 +15,7 @@ type Flags struct {
 	Mapping     string
 	Input       string
 	Start       string
+	Accept      bool
 }
 
 func (f *Flags) RemoveSpaces() {
@@ -27,6 +28,9 @@ func (f *Flags) RemoveSpaces() {
 }
 
 func (f *Flags) toConfig() (*machines.Config, error) {
+	if f.Accept {
+		f.Letters = "0,1"
+	}
 	transitions, err := parseTriples(f.Transitions)
 	if err != nil {
 		return nil, err
@@ -49,11 +53,12 @@ var flags Flags
 func init() {
 
 	states := flag.String("s", "", "give all states as a string like a,b,c,...")
-	letters := flag.String("a", "", "give all letters as a string like 0,1,...")
+	letters := flag.String("l", "", "give all letters as a string like 0,1,...")
 	transitions := flag.String("t", "", "give all transitions as a string containing triples like (a,0,b),...")
 	mapping := flag.String("m", "", "give a mapping for every state to a letter from the alphabet as a string like (a,0),...")
 	input := flag.String("i", "", "give a series of letters as a string 0,1,0,1,1,...")
 	start := flag.String("c", "", "give a state of states as a starting point as a string")
+	accept := flag.Bool("a", false, "sets the alphabet to {0,1} and visualizes the states mapped to 1 as double circles")
 
 	flag.Parse()
 
@@ -64,6 +69,7 @@ func init() {
 		Mapping:     *mapping,
 		Input:       *input,
 		Start:       *start,
+		Accept:      *accept,
 	}
 
 	flags.RemoveSpaces()
