@@ -5,7 +5,17 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/AndreasWillibaldWeber/fsm-sim/machines"
+	machines "github.com/AndreasWillibaldWeber/fsm-sim/machines"
+)
+
+const (
+	acceptLetters                 string = "0,1"
+	spaceSign                     string = " "
+	emptySign                     string = ""
+	commaSeparator                string = ","
+	commaBetweenBracketsSeperator string = "),("
+	roundLeftBracket              string = "("
+	roundRightBracket             string = ")"
 )
 
 type Flags struct {
@@ -29,7 +39,7 @@ func (f *Flags) RemoveSpaces() {
 
 func (f *Flags) toConfig() (*machines.Config, error) {
 	if f.Accept {
-		f.Letters = "0,1"
+		f.Letters = acceptLetters
 	}
 	transitions, err := parseTriples(f.Transitions)
 	if err != nil {
@@ -40,8 +50,8 @@ func (f *Flags) toConfig() (*machines.Config, error) {
 		return nil, err
 	}
 	return &machines.Config{
-		States:      strings.Split(strings.TrimSpace(f.States), ","),
-		Letters:     strings.Split(strings.TrimSpace(f.Letters), ","),
+		States:      strings.Split(strings.TrimSpace(f.States), commaSeparator),
+		Letters:     strings.Split(strings.TrimSpace(f.Letters), commaSeparator),
 		Transitions: transitions,
 		Mapping:     mappings,
 		Start:       strings.TrimSpace(f.Start),
@@ -82,16 +92,16 @@ func Config() (*machines.Config, error) {
 }
 
 func Input() []string {
-	return strings.Split(strings.TrimSpace(flags.Input), ",")
+	return strings.Split(strings.TrimSpace(flags.Input), commaSeparator)
 }
 
 func removeAllSpaces(s string) string {
-	return strings.TrimSpace(strings.ReplaceAll(s, " ", ""))
+	return strings.TrimSpace(strings.ReplaceAll(s, spaceSign, emptySign))
 }
 
 func parseTriples(triples string) ([]machines.Transition, error) {
 	var transitions []machines.Transition
-	for _, triple := range strings.Split(strings.TrimSpace(triples), "),(") {
+	for _, triple := range strings.Split(strings.TrimSpace(triples), commaBetweenBracketsSeperator) {
 		transition, err := parseTriple(triple)
 		if err != nil {
 			return nil, err
@@ -104,10 +114,10 @@ func parseTriples(triples string) ([]machines.Transition, error) {
 
 func parseTriple(triple string) (*machines.Transition, error) {
 
-	triple = strings.ReplaceAll(triple, "(", "")
-	triple = strings.ReplaceAll(triple, ")", "")
+	triple = strings.ReplaceAll(triple, roundLeftBracket, emptySign)
+	triple = strings.ReplaceAll(triple, roundRightBracket, emptySign)
 
-	triples := strings.Split(triple, ",")
+	triples := strings.Split(triple, commaSeparator)
 	if len(triples) < 3 {
 		return nil, fmt.Errorf("transition triples does not have the right format")
 	}
@@ -122,7 +132,7 @@ func parseTriple(triple string) (*machines.Transition, error) {
 func parseTuples(tuples string) ([]machines.Mapping, error) {
 
 	var mappings []machines.Mapping
-	for _, tuple := range strings.Split(strings.TrimSpace(tuples), "),(") {
+	for _, tuple := range strings.Split(strings.TrimSpace(tuples), commaBetweenBracketsSeperator) {
 		mapping, err := parseTuple(tuple)
 		if err != nil {
 			return nil, err
@@ -135,10 +145,10 @@ func parseTuples(tuples string) ([]machines.Mapping, error) {
 
 func parseTuple(tuple string) (*machines.Mapping, error) {
 
-	tuple = strings.ReplaceAll(tuple, "(", "")
-	tuple = strings.ReplaceAll(tuple, ")", "")
+	tuple = strings.ReplaceAll(tuple, roundLeftBracket, emptySign)
+	tuple = strings.ReplaceAll(tuple, roundRightBracket, emptySign)
 
-	tuples := strings.Split(tuple, ",")
+	tuples := strings.Split(tuple, commaSeparator)
 	if len(tuples) < 2 {
 		return nil, fmt.Errorf("mapping tuple does not have the right format")
 	}
